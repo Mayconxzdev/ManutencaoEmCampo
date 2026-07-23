@@ -12,7 +12,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from app.config import APP_VERSION, DATA_ROOT, DATABASE_PATH, LOGS_DIR, REPORTS_DIR, UPLOADS_DIR
+from app.config import APP_VERSION, DATA_ROOT, DATABASE_PATH
 from app.database import get_db
 from app.models import Asset, AssetDocument, MaintenanceOrder, Operator
 from app.search_service import fts5_available
@@ -68,14 +68,7 @@ async def diagnostics(db: AsyncSession = Depends(get_db)):
         "runtime": {
             "python": sys.version.split()[0],
             "platform": platform.platform(),
-            "cwd": str(Path.cwd()),
-        },
-        "paths": {
-            "data_root": str(DATA_ROOT),
-            "database_path": str(DATABASE_PATH),
-            "uploads_dir": str(UPLOADS_DIR),
-            "reports_dir": str(REPORTS_DIR),
-            "logs_dir": str(LOGS_DIR),
+            "storage_mode": "local-demo",
         },
         "storage": {
             "total_bytes": disk.total,

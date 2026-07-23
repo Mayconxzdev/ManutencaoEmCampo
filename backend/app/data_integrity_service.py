@@ -52,15 +52,16 @@ def _now_iso() -> str:
 
 
 def _path_info(path: Path) -> dict[str, Any]:
+    """Expõe estado do armazenamento, não a topologia local do servidor."""
     try:
         exists = path.exists()
         return {
-            "path": str(path),
+            "label": path.name or "armazenamento local",
             "exists": exists,
             "bytes": path.stat().st_size if exists and path.is_file() else None,
         }
     except OSError as exc:
-        return {"path": str(path), "exists": False, "error": str(exc)}
+        return {"label": path.name or "armazenamento local", "exists": False, "error": type(exc).__name__}
 
 
 def _truthy_env(name: str) -> bool:
@@ -96,7 +97,7 @@ async def _safe_scalar(db: AsyncSession, sql: str, params: dict[str, Any] | None
 
 async def sqlite_integrity(db: AsyncSession) -> dict[str, Any]:
     """Executa PRAGMAs de integridade e FK. Em SQLite, integrity_check não substitui foreign_key_check."""
-    result: dict[str, Any] = {"database_path": str(DATABASE_PATH)}
+    result: dict[str, Any] = {}
     try:
         integrity = (await db.execute(text("PRAGMA integrity_check"))).scalars().all()
         result["integrity_check"] = integrity
@@ -168,7 +169,6 @@ async def operational_counts(db: AsyncSession) -> dict[str, Any]:
 async def backup_status(db: AsyncSession) -> dict[str, Any]:
     external = {
         "configured": BACKUP_EXTERNAL_DIR is not None,
-        "path": str(BACKUP_EXTERNAL_DIR) if BACKUP_EXTERNAL_DIR is not None else None,
         "exists": False,
         "writable": False,
     }
@@ -194,7 +194,6 @@ async def backup_status(db: AsyncSession) -> dict[str, Any]:
              LIMIT 1
         """))).mappings().first()
     return {
-        "local_path": str(BACKUPS_DIR),
         "local_exists": BACKUPS_DIR.exists(),
         "external": external,
         "latest_restore_test": dict(latest_restore) if latest_restore else None,

@@ -35,7 +35,7 @@ interface Order {
   id: string;
   friendly_number: number;
   priority: string;
-  status: string; // 'completed', 'completed_with_issues'
+  status: string; // 'completed', 'completed_with_issues', 'demo_completed'
   planned_date?: string | null;
   planned_year?: number | null;
   planned_month?: number | null;
@@ -84,7 +84,7 @@ export default function Historico() {
       const res = await axios.get(`${API_URL}/orders`);
       // Apenas finalizadas
       const completed = res.data.filter((o: any) =>
-        o.status === 'completed' || o.status === 'completed_with_issues'
+        o.status === 'completed' || o.status === 'completed_with_issues' || o.status === 'demo_completed'
       );
       // Ordenar por data de conclusão decrescente
       completed.sort((a: any, b: any) => {
@@ -191,7 +191,7 @@ export default function Historico() {
           Atualizar
         </button>
       </div>
-      <p className="subtitle">Relatório detalhado de todas as preventivas realizadas</p>
+      <p className="subtitle">Registros concluídos, com responsáveis, checklist respondido e evidências preservadas.</p>
 
       {error && (
         <div style={{ backgroundColor: 'var(--danger-light)', color: 'var(--danger)', padding: '16px', borderRadius: '8px', marginBottom: '24px', fontWeight: '500' }}>
@@ -286,6 +286,16 @@ export default function Historico() {
                              order.order_type === 'external' ? 'Assistência Técnica' :
                              order.order_type === 'inspection' ? 'Inspeção/Rodada' :
                              'Preventiva'}
+                          </span>
+                        )}
+                        {order.status === 'demo_completed' && (
+                          <span
+                            style={{
+                              fontSize: '10px', fontWeight: '700', padding: '2px 6px', borderRadius: '4px',
+                              textTransform: 'uppercase', backgroundColor: 'rgba(37, 99, 235, 0.12)', color: '#1d4ed8'
+                            }}
+                          >
+                            Demonstração
                           </span>
                         )}
                         {order.parent_work_order_id && (() => {

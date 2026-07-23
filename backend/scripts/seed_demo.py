@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import io
 import json
 import secrets
 import sys
@@ -19,6 +20,7 @@ from datetime import timedelta
 from pathlib import Path
 
 from sqlalchemy import select
+from PIL import Image
 
 # Allows ``python scripts/seed_demo.py`` from a fresh clone without an
 # editable installation. The path is the local backend directory only.
@@ -42,9 +44,17 @@ from app.models import (
     WorkOrderEvent,
     WorkOrderSequence,
 )
+from app.order_execution_service import answer_item, attach_item_photo, complete_order, start_order
 
 
 DEMO_DISCLAIMER = "Dados fictícios gerados localmente para demonstração pública."
+
+
+def _demo_evidence_png() -> bytes:
+    """Gera uma foto sintética válida, sem depender de arquivo externo."""
+    buffer = io.BytesIO()
+    Image.new("RGB", (48, 32), color=(37, 99, 235)).save(buffer, format="PNG")
+    return buffer.getvalue()
 
 
 def parse_args() -> argparse.Namespace:
@@ -234,6 +244,76 @@ async def _create_order(
     return order
 
 
+async def _complete_demo_order(
+    db,
+    *,
+    order: MaintenanceOrder,
+    reviewer: Operator,
+    executor: Operator,
+) -> None:
+    """Percorre o mesmo serviço de execução usado pelo aplicativo.
+
+    A base pública não simula uma conclusão alterando colunas diretamente:
+    ela cria respostas, uma evidência, o PDF final e o dossiê local por meio
+    da regra real. Assim o README, os testes e as capturas exibem evidência
+    reproduzível do fluxo que o portfólio descreve.
+    """
+    device_id = "demo-seed-tablet"
+    await start_order(
+        db,
+        order.id,
+        reviewer.name,
+        operator_id=reviewer.id,
+        device_id=device_id,
+        record_kind="demo_test",
+    )
+    items_res = await db.execute(
+        select(MaintenanceOrderItem)
+        .where(MaintenanceOrderItem.order_id == order.id)
+        .order_by(MaintenanceOrderItem.id)
+    )
+    items = items_res.scalars().all()
+    if not items:
+        raise RuntimeError("A execução demonstrativa não recebeu itens de checklist.")
+
+    await attach_item_photo(
+        db,
+        order.id,
+        item_id=items[0].item_id,
+        contents=_demo_evidence_png(),
+        filename="evidencia-demonstrativa.png",
+        content_type="image/png",
+        operator_name=reviewer.name,
+        operator_id=reviewer.id,
+        device_id=device_id,
+    )
+    for index, item in enumerate(items):
+        await answer_item(
+            db,
+            order.id,
+            item_id=item.item_id,
+            result="ok",
+            operator_name=reviewer.name,
+            operator_id=reviewer.id,
+            notes="Verificação demonstrativa concluída com resultado normal." if index == 0 else None,
+            device_id=device_id,
+        )
+    result = await complete_order(
+        db,
+        order.id,
+        reviewer.name,
+        operator_id=reviewer.id,
+        final_condition="released",
+        notes="Execução sintética concluída para demonstrar histórico, PDF e evidências.",
+        idempotency_key=f"demo-seed-{order.id}",
+        device_id=device_id,
+        performed_by_name=executor.name,
+        performed_by_operator_id=executor.id,
+    )
+    if not result.get("pdf_path"):
+        raise RuntimeError("A execução demonstrativa foi concluída sem PDF final.")
+
+
 async def seed(*, reset: bool) -> None:
     ensure_data_dirs()
     if reset and not _is_safe_demo_database():
@@ -281,12 +361,14 @@ async def seed(*, reset: bool) -> None:
         await _create_order(db, number=1001, asset=asset_1, version=version_1, plan=plan_1, reviewer=reviewers[0], executor=executors[0], status="today", execution_status="not_started", planned_offset_days=0)
         await _create_order(db, number=1002, asset=asset_2, version=version_2, plan=plan_2, reviewer=reviewers[0], executor=executors[0], status="overdue", execution_status="not_started", planned_offset_days=-3)
         await _create_order(db, number=1003, asset=asset_3, version=version_3, plan=plan_3, reviewer=reviewers[1], executor=executors[1], status="in_progress", execution_status="in_progress", planned_offset_days=0)
-        await _create_order(db, number=1004, asset=asset_4, version=version_4, plan=plan_4, reviewer=reviewers[1], executor=executors[1], status="completed", execution_status="completed", planned_offset_days=-1, completed=True)
+        completed_demo_order = await _create_order(db, number=1004, asset=asset_4, version=version_4, plan=plan_4, reviewer=reviewers[1], executor=executors[1], status="today", execution_status="not_started", planned_offset_days=-1)
         db.add(WorkOrderSequence(name="maintenance_order", next_value=1005))
         await db.commit()
+        await _complete_demo_order(db, order=completed_demo_order, reviewer=reviewers[1], executor=executors[1])
 
     print(f"Base demonstrativa criada em: {DATABASE_PATH}")
     print("4 ativos, 4 pessoas, 4 planos e 4 OMs fictícias foram gerados.")
+    print("A OM demonstrativa concluída possui respostas, evidência, PDF e dossiê local recriáveis.")
 
 
 if __name__ == "__main__":

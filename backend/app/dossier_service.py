@@ -1,6 +1,6 @@
-"""Dossiê imutável por ativo/ordem no repositório NAS oficial.
+"""Dossiê imutável por ativo/ordem no repositório documental configurado.
 
-O NAS é uma cópia documental verificável, não o banco transacional. Cada
+O repositório de dossiês é uma cópia documental verificável, não o banco transacional. Cada
 sincronização reescreve apenas o manifesto da OM e copia evidências pelo UUID,
 mantendo o hash de cada arquivo. Falhas de rede ficam persistidas na fila, sem
 descartar a evidência local.
@@ -293,7 +293,7 @@ async def sync_asset_baseline(db: AsyncSession, asset_id: str) -> dict[str, Any]
     if not asset:
         raise ValueError("Ativo não encontrado para criação do dossiê-base.")
     if not NAS_REPOSITORY_DIR.exists():
-        raise RuntimeError(f"Repositório NAS indisponível: {NAS_REPOSITORY_DIR}")
+        raise RuntimeError(f"Repositório de dossiês indisponível: {NAS_REPOSITORY_DIR}")
     root = _asset_directory(asset)
     documents_dir = root / "00_Ativo" / "01_Documentos"
     documents_dir.mkdir(parents=True, exist_ok=True)
@@ -339,7 +339,7 @@ async def sync_job(db: AsyncSession, job: DossierSyncJob) -> dict[str, Any]:
     await db.flush()
     try:
         if not NAS_REPOSITORY_DIR.exists():
-            raise RuntimeError(f"Repositório NAS indisponível: {NAS_REPOSITORY_DIR}")
+            raise RuntimeError(f"Repositório de dossiês indisponível: {NAS_REPOSITORY_DIR}")
         order = await _get_order(db, job.order_id)
         target = _order_directory(order)
         # A primeira sincronização pode ocorrer ainda em andamento (por causa

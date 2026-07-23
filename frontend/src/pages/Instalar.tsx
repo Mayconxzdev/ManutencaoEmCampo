@@ -68,7 +68,7 @@ export default function Instalar() {
           </div>
           <div className="card" style={{ padding: 16, border: '1px solid var(--border)' }}>
             <strong>Privacidade</strong>
-            <p>Não há conexão automática com redes, NAS, banco ou documentos externos.</p>
+            <p>Não há conexão automática com redes, bancos ou repositórios externos.</p>
           </div>
         </section>
 

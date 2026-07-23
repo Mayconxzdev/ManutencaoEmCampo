@@ -183,12 +183,12 @@ export default function SystemDiagnostics() {
             </div>
           </div>
 
-          {/* Métricas de Hardware, Banco e NAS */}
+          {/* Métricas de Hardware, Banco e armazenamento documental */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '18px', marginBottom: '12px' }}>
-            {/* Card de Armazenamento NAS / Local */}
+            {/* Card de armazenamento local / repositório documental */}
             <div className="card" style={{ padding: 20 }}>
               <h4 style={{ margin: '0 0 16px 0', fontSize: 15, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Database size={18} /> Armazenamento e NAS
+                <Database size={18} /> Armazenamento e dossiês
               </h4>
               {report.storage ? (
                 <div>
@@ -225,10 +225,10 @@ export default function SystemDiagnostics() {
                   <strong>{formatBytes(report.paths?.database?.bytes)}</strong>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span>Status do Backup Externo (NAS):</span>
+                  <span>Status do backup externo:</span>
                   <strong style={{ color: report.backup?.external?.configured && report.backup?.external?.writable ? 'var(--success)' : 'var(--warning)' }}>
                     {report.backup?.external?.configured
-                      ? (report.backup?.external?.writable ? 'Operacional (NAS)' : 'Configurado, mas inacessível')
+                      ? (report.backup?.external?.writable ? 'Operacional' : 'Configurado, mas inacessível')
                       : 'Não configurado'}
                   </strong>
                 </div>
@@ -240,11 +240,9 @@ export default function SystemDiagnostics() {
                       : 'Nenhum realizado'}
                   </strong>
                 </div>
-                {report.paths?.database?.path && (
-                  <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid var(--border)', fontSize: 11, color: 'var(--text-muted)', wordBreak: 'break-all', fontFamily: 'monospace' }}>
-                    Caminho: {report.paths.database.path}
-                  </div>
-                )}
+                <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid var(--border)', fontSize: 11, color: 'var(--text-muted)' }}>
+                  Diagnóstico mostra integridade e tamanho, sem expor caminhos locais do dispositivo.
+                </div>
               </div>
             </div>
           </div>

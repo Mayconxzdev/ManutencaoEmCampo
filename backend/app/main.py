@@ -10,7 +10,7 @@ import asyncio
 import os
 
 from app.database import get_db
-from app.config import PROJECT_ROOT, DATABASE_PATH, UPLOADS_DIR as CONFIG_UPLOADS_DIR, THUMBNAILS_DIR, APP_VERSION, ensure_data_dirs
+from app.config import PROJECT_ROOT, UPLOADS_DIR as CONFIG_UPLOADS_DIR, THUMBNAILS_DIR, APP_VERSION, ensure_data_dirs
 from app.clock import utcnow_naive, local_today
 from app.models import Asset, MaintenancePlan, MaintenanceOrder, MaintenanceEvidence
 from app.upload_service import evidence_absolute_path as resolve_evidence_path
@@ -59,7 +59,7 @@ async def lifespan(app_instance: FastAPI):
     except Exception as e:
         print(f"[STARTUP ERROR] Falha no startup: {e}")
     async def retry_dossier_queue() -> None:
-        """Tenta novamente a fila do NAS sem exigir que alguém saiba usar TI."""
+        """Tenta novamente a fila documental sem exigir que alguém saiba usar TI."""
         from app.database import SessionLocal
         while True:
             await asyncio.sleep(300)
@@ -134,7 +134,9 @@ async def approve_suggestions_batch_compat(req: ApproveBatchRequest, request: Re
 
 @app.get("/health")
 async def health_check():
-    return {"status": "ok", "version": APP_VERSION, "database": str(DATABASE_PATH)}
+    # O endpoint é usado por health checks e pela demonstração. Não expõe o
+    # caminho local do banco, pois isso não é necessário para verificar saúde.
+    return {"status": "ok", "version": APP_VERSION, "storage": "local-demo"}
 
 # Configurando CORS para comunicação com o frontend Vite (geralmente porta 5173 ou rede local)
 allowed_origins = [origin.strip() for origin in os.getenv(

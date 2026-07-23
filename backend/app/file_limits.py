@@ -10,14 +10,14 @@ from app.config import CONFIG_DIR
 
 
 MB = 1024 * 1024
-GB = 1024 * MB
-
 DEFAULT_LIMITS: dict[str, int] = {
-    "image": 100 * MB,
-    "document": 500 * MB,
-    "audio": 500 * MB,
-    "video": 2 * GB,
-    "other": 500 * MB,
+    # Limites conservadores para uma demonstração local. Uma implantação
+    # corporativa pode ampliar esses valores conscientemente por configuração.
+    "image": 20 * MB,
+    "document": 50 * MB,
+    "audio": 50 * MB,
+    "video": 100 * MB,
+    "other": 50 * MB,
 }
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}

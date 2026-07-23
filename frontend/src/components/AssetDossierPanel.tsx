@@ -40,7 +40,7 @@ function conditionLabel(value?: string | null) {
   return 'Em registro';
 }
 
-/** Prontuário legível do ativo: histórico, evidências, NAS e qualidade. */
+/** Prontuário legível do ativo: histórico, evidências, dossiês e qualidade. */
 export default function AssetDossierPanel({ assetId }: { assetId: string }) {
   const [data, setData] = useState<Traceability | null>(null);
   const [loading, setLoading] = useState(true);
@@ -71,7 +71,7 @@ export default function AssetDossierPanel({ assetId }: { assetId: string }) {
       await axios.post(`${API_URL}/v2/assets/${assetId}/dossier/sync`);
       await load();
     } catch {
-      setError('A cópia para o NAS não pôde ser atualizada agora. O sistema mantém o original local e tentará novamente.');
+      setError('A cópia para o repositório de dossiês não pôde ser atualizada agora. O registro local foi preservado e haverá nova tentativa.');
     } finally {
       setSyncing(false);
     }
@@ -95,12 +95,12 @@ export default function AssetDossierPanel({ assetId }: { assetId: string }) {
             </p>
           </div>
           <button className="btn btn-secondary" type="button" onClick={sync} disabled={syncing}>
-            <FolderSync size={16} /> {syncing ? 'Atualizando cópia...' : 'Atualizar cópia no NAS'}
+            <FolderSync size={16} /> {syncing ? 'Atualizando cópia...' : 'Atualizar cópia do dossiê'}
           </button>
         </div>
         <div style={{ marginTop: 12, fontSize: 13, display: 'flex', gap: 8, alignItems: 'center', color: synced ? 'var(--success)' : 'var(--warning)' }}>
           {synced ? <CheckCircle2 size={16} /> : <AlertTriangle size={16} />}
-          {synced ? 'Cópia do dossiê conferida no NAS.' : 'Cópia no NAS aguardando nova tentativa; o registro local está preservado.'}
+          {synced ? 'Cópia do dossiê conferida no repositório local.' : 'Cópia do dossiê aguardando nova tentativa; o registro local está preservado.'}
         </div>
         {latestJob?.target_path && <code style={{ display: 'block', marginTop: 8, fontSize: 11, overflowWrap: 'anywhere', color: 'var(--text-muted)' }}>{latestJob.target_path}</code>}
       </section>

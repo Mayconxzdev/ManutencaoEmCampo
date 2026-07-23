@@ -5,7 +5,7 @@
   "scripts": {
     "dev:backend": "cd backend && uvicorn app.main:app --reload --port 8000",
     "dev:frontend": "cd frontend && npm run dev",
-    "install:all": "npm install --prefix frontend && pip install -r backend/requirements-core.txt"
+    "install:all": "npm install --prefix frontend && python -m pip install -r backend/requirements-core.txt"
   },
   "keywords": [
     "manutencao",
@@ -13,6 +13,14 @@
     "pwa",
     "fastapi"
   ],
-  "author": "Maycon Xavier",
-  "license": "MIT"
+  "author": "Maycon Ferreira <mayconxz00dev@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mayconxzdev/ManutencaoEmCampo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Mayconxzdev/ManutencaoEmCampo/issues"
+  },
+  "homepage": "https://github.com/Mayconxzdev/ManutencaoEmCampo#readme"
 }

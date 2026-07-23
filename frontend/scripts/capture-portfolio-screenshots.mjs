@@ -65,7 +65,10 @@ async function main() {
     await page.screenshot({ path: path.join(outputDir, '01-painel-operacional.png'), fullPage: true });
     await capture(page, '/ativos', /Máquinas e Equipamentos/, '02-ativos-e-identificacao.png');
     await capture(page, '/checklists/iniciar', /Iniciar Checklist Digital/, '03-checklist-por-ativo.png');
-    await capture(page, '/historico', /Histórico/, '04-historico.png');
+    await page.goto(`${baseUrl}/historico`, { waitUntil: 'networkidle' });
+    await page.getByRole('heading', { name: /Histórico/ }).waitFor();
+    await page.getByRole('button', { name: /Ver Checklist Respondido/ }).click();
+    await page.screenshot({ path: path.join(outputDir, '04-historico-com-evidencias.png'), fullPage: true });
     await browser.close();
   } finally {
     server.kill();
