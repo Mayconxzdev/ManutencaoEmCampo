@@ -1,4 +1,4 @@
 opencv-python>=4.9.0
-paddleocr>=2.8.0
+paddleocr>=3.7.0
 paddlepaddle>=3.3.0
 rapidocr-onnxruntime>=1.4.4
