@@ -1,0 +1,2 @@
+opentelemetry-sdk>=1.26.0
+opentelemetry-instrumentation-fastapi>=0.47b0

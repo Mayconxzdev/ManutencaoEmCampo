@@ -1,0 +1,17 @@
+# Recursos opcionais — instale apenas no servidor que precisa desses módulos.
+# Transcrição local/ASR
+faster-whisper>=1.1.0
+# Extração de PDF
+pymupdf>=1.24.0
+pypdf>=4.0.0
+# OCR e parsing documental avançado
+paddleocr>=2.8.0
+paddlepaddle>=3.3.0
+rapidocr-onnxruntime>=1.4.4
+# Busca semântica/RAG local opcional
+sentence-transformers>=5.0.0
+qdrant-client>=1.10.0
+lancedb>=0.13.0
+# Observabilidade opcional
+opentelemetry-sdk>=1.26.0
+opentelemetry-instrumentation-fastapi>=0.47b0

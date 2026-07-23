@@ -1,0 +1,43 @@
+# Ambientes e dependências
+.venv/
+venv/
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# Dados criados apenas para a demonstração local
+data/
+.e2e_data/
+data-test/
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
+uploads/
+backups/
+reports/
+dossies/
+
+# Segredos e configurações privadas
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.cer
+
+# Resultados e ferramentas locais
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.playwright-cli/
+playwright-report/
+output/
+test-results/
+coverage/
+htmlcov/
+.mypy_cache/
+.vscode/
+.idea/
+.DS_Store

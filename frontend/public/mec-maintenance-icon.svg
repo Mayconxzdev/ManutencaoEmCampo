@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Manutenção em Campo</title>
+  <rect width="512" height="512" rx="104" fill="#12398a"/>
+  <path d="M256 63 409 120v112c0 100-65 176-153 217C168 408 103 332 103 232V120L256 63Z" fill="#2563eb"/>
+  <path d="m160 259 59 59 136-145" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="40"/>
+  <circle cx="386" cy="386" r="76" fill="#f59e0b" stroke="#fff" stroke-width="12"/>
+  <path d="m355 415 61-61m-18-18 30 30m-74 74 30-30" stroke="#12398a" stroke-width="19" stroke-linecap="round"/>
+</svg>

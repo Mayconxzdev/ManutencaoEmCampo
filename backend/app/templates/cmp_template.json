@@ -1,0 +1,11 @@
+{
+  "target_width": 800,
+  "target_height": 1100,
+  "row_start_y": 380,
+  "row_height": 45,
+  "columns": {
+    "ok": {"x_start": 540, "x_end": 565},
+    "def": {"x_start": 620, "x_end": 645},
+    "na": {"x_start": 700, "x_end": 725}
+  }
+}

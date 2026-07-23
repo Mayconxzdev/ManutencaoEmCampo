@@ -1,0 +1,18 @@
+{
+  "name": "manutencao-em-campo",
+  "version": "1.0.0",
+  "description": "Demonstração pública de gestão de manutenção com rastreabilidade em campo",
+  "scripts": {
+    "dev:backend": "cd backend && uvicorn app.main:app --reload --port 8000",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "npm install --prefix frontend && pip install -r backend/requirements-core.txt"
+  },
+  "keywords": [
+    "manutencao",
+    "industrial",
+    "pwa",
+    "fastapi"
+  ],
+  "author": "Maycon Xavier",
+  "license": "MIT"
+}

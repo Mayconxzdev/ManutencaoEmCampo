@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/mec-maintenance-icon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#1e3a8a" />
+    <title>Manutenção em Campo</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Evita tela branca se uma atualização deixar um navegador com índice e
+      // arquivos JavaScript de versões diferentes no cache antigo.
+      window.addEventListener('error', function () {
+        if (!sessionStorage.getItem('mec-recovered-from-stale-cache')) {
+          sessionStorage.setItem('mec-recovered-from-stale-cache', '1');
+          if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(rs => Promise.all(rs.map(r => r.unregister()))).finally(() => location.reload());
+        }
+      }, true);
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('Service Worker registrado!', reg))
+            .catch(err => console.error('Erro ao registrar Service Worker', err));
+        });
+      }
+    </script>
+  </body>
+</html>
