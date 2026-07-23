@@ -11,7 +11,7 @@ rapidocr-onnxruntime>=1.4.4
 # Busca semântica/RAG local opcional
 sentence-transformers>=5.0.0
 qdrant-client>=1.10.0
-lancedb>=0.13.0
+lancedb>=0.34.0
 # Observabilidade opcional
 opentelemetry-sdk>=1.26.0
 opentelemetry-instrumentation-fastapi>=0.47b0

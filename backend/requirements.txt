@@ -23,7 +23,7 @@ paddlepaddle>=3.3.0
 rapidocr-onnxruntime>=1.4.4
 sentence-transformers>=5.0.0
 qdrant-client>=1.10.0
-lancedb>=0.13.0
+lancedb>=0.34.0
 opentelemetry-sdk>=1.26.0
 opentelemetry-instrumentation-fastapi>=0.47b0
 tzdata
