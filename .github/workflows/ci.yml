@@ -53,12 +53,16 @@ jobs:
       - name: Instalar dependências
         working-directory: frontend
         env:
+          # Sobrescreve qualquer configuração herdada pelo runner neste passo.
+          npm_config_registry: https://registry.npmjs.org/
           npm_config_fetch_retries: 3
           npm_config_fetch_retry_factor: 2
           npm_config_fetch_retry_mintimeout: 2000
           npm_config_fetch_retry_maxtimeout: 30000
           npm_config_fetch_timeout: 120000
-        run: npm ci --prefer-offline --no-audit --fund=false
+        run: |
+          npm config get registry
+          npm ci --prefer-offline --no-audit --fund=false
       - name: Lint
         working-directory: frontend
         run: npm run lint
