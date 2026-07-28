@@ -84,7 +84,7 @@ Detalhes: [arquitetura](docs/arquitetura.md) · [decisões técnicas](docs/decis
 ### Pré-requisitos
 
 - Python 3.11 ou 3.12;
-- Node.js 20 ou superior;
+- Node.js 22 LTS ou superior;
 - npm.
 
 ### 1. Backend e dados fictícios
@@ -115,18 +115,15 @@ O script `seed_demo.py` cria quatro ativos, quatro pessoas, quatro planos e quat
 ## Validar o projeto
 
 ```powershell
-# Backend: base fictícia e proteção do reset
-cd backend
-pytest tests -q
+# Com o ambiente virtual do passo 1 ainda ativado:
+# Da raiz do repositório: uma sequência curta para revisão técnica
+npm run validate
 
-# Frontend
-cd ..\frontend
-npm run lint
-npm run build
-npm run test:e2e
+# Fluxos de tela em desktop, tablet e celular, sempre com base isolada
+npm run test:browser
 ```
 
-O GitHub Actions executa o teste da base demonstrativa, o ciclo de conclusão com PDF/evidência, lint, build e os testes de navegador a cada push e pull request. O teste de navegador sobe uma instância isolada e descartável.
+Também é possível rodar cada etapa isoladamente com `npm run test:backend`, `npm run lint` e `npm run build`. O GitHub Actions executa o teste da base demonstrativa, o ciclo de conclusão com PDF/evidência, lint, build e os testes de navegador a cada push e pull request. O teste de navegador sobe uma instância isolada e descartável.
 
 ## Decisões de engenharia que valem conhecer
 

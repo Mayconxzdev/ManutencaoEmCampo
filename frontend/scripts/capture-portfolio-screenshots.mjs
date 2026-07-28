@@ -46,6 +46,8 @@ async function selectReviewer(page) {
 async function capture(page, route, heading, filename) {
   await page.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
   await page.getByRole('heading', { name: heading }).waitFor();
+  // Cada imagem do README começa no topo, mesmo se uma ação anterior rolou a tela.
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: path.join(outputDir, filename), fullPage: true });
 }
 
@@ -62,12 +64,14 @@ async function main() {
     const browser = await chromium.launch();
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
     await selectReviewer(page);
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({ path: path.join(outputDir, '01-painel-operacional.png'), fullPage: true });
     await capture(page, '/ativos', /Máquinas e Equipamentos/, '02-ativos-e-identificacao.png');
     await capture(page, '/checklists/iniciar', /Iniciar Checklist Digital/, '03-checklist-por-ativo.png');
     await page.goto(`${baseUrl}/historico`, { waitUntil: 'networkidle' });
     await page.getByRole('heading', { name: /Histórico/ }).waitFor();
     await page.getByRole('button', { name: /Ver Checklist Respondido/ }).click();
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({ path: path.join(outputDir, '04-historico-com-evidencias.png'), fullPage: true });
     await browser.close();
   } finally {
