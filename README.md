@@ -123,7 +123,7 @@ npm run validate
 npm run test:browser
 ```
 
-Também é possível rodar cada etapa isoladamente com `npm run test:backend`, `npm run lint` e `npm run build`. O GitHub Actions executa o teste da base demonstrativa, o ciclo de conclusão com PDF/evidência, lint, build e os testes de navegador a cada push e pull request. O teste de navegador sobe uma instância isolada e descartável.
+Também é possível rodar cada etapa isoladamente com `npm run test:backend`, `npm run lint` e `npm run build`. O GitHub Actions executa o teste da base demonstrativa, lint e build a cada push e pull request. Os fluxos de navegador são reprodutíveis localmente por `npm run test:browser`: sobem uma instância isolada e descartável e percorrem desktop, tablet e celular. O Playwright é uma dependência opcional para que a qualidade estática não fique bloqueada em runners corporativos com proxy restrito.
 
 ## Decisões de engenharia que valem conhecer
 
