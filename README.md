@@ -13,6 +13,12 @@
 > [!IMPORTANT]
 > Todos os dados, pessoas, ativos, fabricantes, ordens, fotos e cenários deste repositório são **fictícios**. Não há conexão com empresa, servidor, NAS, banco, documento ou infraestrutura externa.
 
+### Origem do case
+
+Esta demonstração pública foi derivada de padrões, jornadas e necessidades observados no sistema privado **Vesper Manutenção**.
+
+O projeto público foi reconstruído com dados, pessoas, ativos, ordens e evidências totalmente fictícios. Nenhum documento, banco, credencial, endereço, infraestrutura ou registro operacional da empresa foi copiado para este repositório.
+
 ## Por que este projeto existe
 
 Equipes de manutenção precisam registrar a execução sem depender de papel, sem perder o histórico anterior e sem transformar o uso em campo em uma tarefa burocrática. O projeto explora esse problema como produto e como sistema: cada execução possui contexto, responsável pela conferência, responsável técnico, checklist versionado, evidências e trilha de eventos.
